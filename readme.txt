@@ -1,3 +1,3 @@
 # Classy Clash
 
-![Screenshot of the videogame](characters/Screenshot.png)
+![videogame_Screenshot](./characters/Screenshot.png)
