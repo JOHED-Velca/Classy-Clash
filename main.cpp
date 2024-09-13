@@ -23,6 +23,18 @@ int main()
         (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight.height) // (float) = C cast style
     };
 
+    Texture2D knight_idle = LoadTexture("characters/knight_idle_spritesheet.png");
+    Vector2 knightIdlePos{
+        (float)windowDimensions[0]/2.0f - 4.0f * (0.5 * (float)knight_idle.width/6.0f),
+        (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight_idle.height)
+    };
+    
+    Texture2D knight_run = LoadTexture("characters/knight_run_spritesheet.png");
+    Vector2 knightRunPos{
+        (float)windowDimensions[0]/2.0f - 4.0f * (0.5 * (float)knight_run.width/6.0f),
+        (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight_run.height)
+    };
+
     //1: Facing right, -1: facing left
     float rightLeft{1.f};
     // animation variables
@@ -62,14 +74,20 @@ int main()
             runningTime = 0.0;
             //update animation frame
             frame++;
-            if (frame > maxFrames)
-            {
-                frame = 0;
-            }
+            if (frame > maxFrames) frame = 0; // this frame tells us which animation from the sp we choose
+        }
+        
+        if (direction.x == 0)
+        {
+            knight = knight_idle;
+        }
+        else
+        {
+            knight = knight_run;
         }
 
         //Draw Character
-        Rectangle source {0.f, 0.f, rightLeft * (float)knight.width/6.f, (float)knight.height};
+        Rectangle source {frame * (float)knight.width/6.f, 0.f, rightLeft * (float)knight.width/6.f, (float)knight.height};
         Rectangle dest {knightPos.x, knightPos.y, 4.0f * (float)knight.width/6.0f, 4.0f * (float)knight.height};
         DrawTexturePro(knight, source, dest, Vector2{}, 0.f, WHITE);
 
