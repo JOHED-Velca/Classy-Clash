@@ -16,23 +16,12 @@ int main()
     Vector2 mapPos{0.0, 0.0};
 
     float speed{4.0};
-
+    Texture2D knight_idle = LoadTexture("characters/knight_idle_spritesheet.png");
+    Texture2D knight_run = LoadTexture("characters/knight_run_spritesheet.png");
     Texture2D knight = LoadTexture("characters/knight_idle_spritesheet.png");
     Vector2 knightPos{
         (float)windowDimensions[0]/2.0f - 4.0f * (0.5 * (float)knight.width/6.0f), //f=to make it a float
         (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight.height) // (float) = C cast style
-    };
-
-    Texture2D knight_idle = LoadTexture("characters/knight_idle_spritesheet.png");
-    Vector2 knightIdlePos{
-        (float)windowDimensions[0]/2.0f - 4.0f * (0.5 * (float)knight_idle.width/6.0f),
-        (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight_idle.height)
-    };
-    
-    Texture2D knight_run = LoadTexture("characters/knight_run_spritesheet.png");
-    Vector2 knightRunPos{
-        (float)windowDimensions[0]/2.0f - 4.0f * (0.5 * (float)knight_run.width/6.0f),
-        (float)windowDimensions[1]/2.0f - 4.0f * (0.5 * (float)knight_run.height)
     };
 
     //1: Facing right, -1: facing left
@@ -40,7 +29,7 @@ int main()
     // animation variables
     float runningTime{};
     int frame{};
-    const int maxFrames{};
+    const int maxFrames{6};
     const float updateTime{1.f/12.f};
 
     SetTargetFPS(60);
@@ -61,7 +50,12 @@ int main()
             // set mapPos = mapPos - direction
             //direction = scaling the normalized direction vector by speed
             mapPos = Vector2Subtract(mapPos, Vector2Scale(Vector2Normalize(direction), speed));
-            direction.x < 0.f ? rightLeft = -1.f : rightLeft = 1.f; // ternary operator = if else with one conditio
+            direction.x < 0.f ? rightLeft = -1.f : rightLeft = 1.f; // ternary operator = if else with one condition
+            knight = knight_run;
+        }
+        else
+        {
+            knight = knight_idle;
         }
 
         //Draw Map
@@ -71,19 +65,11 @@ int main()
         runningTime += GetFrameTime();
         if (runningTime >= updateTime)
         {
-            runningTime = 0.0;
-            //update animation frame
             frame++;
+            runningTime = 0.f;
+            //update animation frame
+            
             if (frame > maxFrames) frame = 0; // this frame tells us which animation from the sp we choose
-        }
-        
-        if (direction.x == 0)
-        {
-            knight = knight_idle;
-        }
-        else
-        {
-            knight = knight_run;
         }
 
         //Draw Character
@@ -95,5 +81,8 @@ int main()
         EndDrawing();
     }
     UnloadTexture(map);
+    UnloadTexture(knight);
+    UnloadTexture(knight_idle);
+    UnloadTexture(knight_run);
     CloseWindow();
 }
