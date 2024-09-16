@@ -2,17 +2,13 @@
 #include "raylib.h"
 #include "raymath.h"
 
-Character::Character()
+Character::Character(int winWidth, int winHeight)
 {
     width = texture.width/maxFrames;
     height = texture.height;
-}
-
-void Character::setScreenPos(int winWidth, int winHeight)
-{
     screenPos = {
-        (float)winWidth / 2.0f - 4.0f * (0.5f * width), // f=to make it a float
-        (float)winHeight / 2.0f - 4.0f * (0.5f * height)       // (float) = C cast style
+        static_cast<float>(winWidth) / 2.0f - scale * (0.5f * width), // f=to make it a float
+        static_cast<float>(winHeight) / 2.0f - scale * (0.9f * height) // (float) = C cast style
     };
 }
 
@@ -56,7 +52,7 @@ void Character::tick(float deltaTime)
 
     // Draw Character
     Rectangle source{frame * width, 0.f, rightLeft * width, height};
-    Rectangle dest{screenPos.x, screenPos.y, 4.0f * width, 4.0f * height};
+    Rectangle dest{screenPos.x, screenPos.y, scale * width, scale * height};
     DrawTexturePro(texture, source, dest, Vector2{}, 0.f, WHITE);
 }
 
