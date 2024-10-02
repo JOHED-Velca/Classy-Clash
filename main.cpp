@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "Prop.h"
 #include "Enemy.h"
+#include <string>
 
 // struct are public but classes can be private
 
@@ -52,8 +53,21 @@ int main()
             prop.Render(knight.getWorldPos());
         }
 
-        knight.tick(GetFrameTime());
+        if (!knight.getAlive()) //Character dead
+        {
+            DrawText("Game Over!", 55.f, 45.f, 40, RED);
+            EndDrawing();
 
+            continue; // Cut the rest of the loop and begin the next iteration of it
+        }
+        else // Character alive
+        {
+            std::string knightsHealth = "Health: ";
+            knightsHealth.append(std::to_string(knight.getHealth()), 0, 5);
+            DrawText(knightsHealth.c_str(), 55.f, 45.f, 40, RED);
+        }
+
+        knight.tick(GetFrameTime());
         //check map bounds
         if (knight.getWorldPos().x < 0.f ||
             knight.getWorldPos().y < 0.f ||
